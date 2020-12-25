@@ -11,7 +11,7 @@ public class ImageExportDirectory {
     short majorVersion;
     short minorVersion;
     int name;
-    int Base;
+    int base;
     int numberOfFunctions;
     int numberOfNames;
     int addressOfFunctions;

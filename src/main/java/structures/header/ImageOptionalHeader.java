@@ -37,5 +37,5 @@ public class ImageOptionalHeader {
     int sizeOfHeapCommit;
     int loaderFlags;
     int numberOfRvaAndSizes;
-    ImageDataDirectory[] DataDirectory;
+    ImageDataDirectory[] dataDirectory;
 }
