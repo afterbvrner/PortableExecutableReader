@@ -1,4 +1,4 @@
-package structures.thunk;
+package structure.thunk;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

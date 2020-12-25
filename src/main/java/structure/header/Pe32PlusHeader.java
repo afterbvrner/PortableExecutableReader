@@ -1,13 +1,11 @@
-package structures.header;
+package structure.header;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import structures.header.ImageFileHeader;
-import structures.header.ImageOptionalHeader;
 
 @Data
 @NoArgsConstructor
-public class Pe32Header {
+public class Pe32PlusHeader {
     char[] signature1;
     short signature2;
     ImageFileHeader fileHeader;

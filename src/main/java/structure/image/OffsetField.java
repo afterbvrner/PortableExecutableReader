@@ -1,4 +1,4 @@
-package structures.image;
+package structure.image;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

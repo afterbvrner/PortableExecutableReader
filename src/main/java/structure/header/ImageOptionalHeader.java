@@ -1,8 +1,8 @@
-package structures.header;
+package structure.header;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import structures.directory.ImageDataDirectory;
+import structure.directory.ImageDataDirectory;
 
 @Data
 @NoArgsConstructor

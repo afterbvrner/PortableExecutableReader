@@ -1,4 +1,4 @@
-package structures.directory;
+package structure.directory;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

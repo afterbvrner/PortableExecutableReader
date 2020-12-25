@@ -1,4 +1,4 @@
-package structures.header;
+package structure.header;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
