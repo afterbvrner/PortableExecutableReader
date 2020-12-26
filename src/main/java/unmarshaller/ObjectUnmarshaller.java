@@ -68,6 +68,18 @@ public class ObjectUnmarshaller {
         if (ignore != null)
             return;
 
+        Conditional conditional = field.getAnnotation(Conditional.class);
+        if (conditional != null) {
+            Method conditionalMethod = obj.getClass().getDeclaredMethod(conditional.value());
+            if (!conditionalMethod.getReturnType().isAssignableFrom(boolean.class))
+                throw new IllegalArgumentException("Conditional method should return boolean");
+            boolean value = (boolean) conditionalMethod.invoke(obj);
+            if (conditional.invert())
+                value = !value;
+            if (!value)
+                return;
+        }
+
         UnmarshallHint hint = new UnmarshallHint();
         unmarshaller.Charset charsetAnnotation =
                 field.getAnnotation(unmarshaller.Charset.class);
