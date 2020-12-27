@@ -1,3 +1,4 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
 import controller.PortableExecutable;
 import unmarshaller.ObjectUnmarshaller;
 
@@ -12,6 +13,7 @@ public class Main {
                 ByteOrder.LITTLE_ENDIAN
         );
         PortableExecutable executable = unmarshaller.unmarshall(PortableExecutable.class);
-        System.out.println(executable);
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(executable));
     }
 }
