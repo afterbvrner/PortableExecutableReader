@@ -7,6 +7,9 @@ import structure.directory.ImageImportDirectory;
 import structure.header.*;
 import unmarshaller.GetLen;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 @Data
 @NoArgsConstructor
 public class PortableExecutable {
@@ -17,7 +20,7 @@ public class PortableExecutable {
     ImageFileHeader fileHeader;
     ImageOptionalHeader optionalHeader;
     @GetLen("getSectionsAmount")
-    ImageSectionHeader sectionHeader;
+    ImageSectionHeader[] sectionHeader;
     ImageExportDirectory exportDirectory;
     ImageImportDirectory importDirectory;
 
@@ -25,13 +28,15 @@ public class PortableExecutable {
     public String toString() {
         return "PortableExecutable{" +
                 "dosHeader=" + dosHeader +
-                ", stub=" + String.valueOf(stub) +
-                ", pe32Header=" + pe32Header +
-                ", fileHeader=" + fileHeader +
-                ", optionalHeader=" + optionalHeader +
-                ", sectionHeader=" + sectionHeader +
-                ", exportDirectory=" + exportDirectory +
-                ", importDirectory=" + importDirectory +
+                ", \nstub=" + String.valueOf(stub) +
+                ", \npe32Header=" + pe32Header +
+                ", \nfileHeader=" + fileHeader +
+                ", \noptionalHeader=" + optionalHeader +
+                ", \nsectionHeader=\n" + Arrays.stream(sectionHeader)
+                                            .map(Object::toString)
+                                            .collect(Collectors.joining("\n")) +
+                ", \nexportDirectory=" + exportDirectory +
+                ", \nimportDirectory=" + importDirectory +
                 '}';
     }
 
