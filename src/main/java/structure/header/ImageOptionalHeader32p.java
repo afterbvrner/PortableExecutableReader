@@ -3,6 +3,7 @@ package structure.header;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import structure.directory.ImageDataDirectory;
+import unmarshaller.Len;
 
 @Data
 @NoArgsConstructor
@@ -36,5 +37,5 @@ public class ImageOptionalHeader32p {
     int sizeOfHeapCommit;
     int loaderFlags;
     int numberOfRvaAndSizes;
-    ImageDataDirectory[] dataDirectory;
+    @Len(16) ImageDataDirectory[] dataDirectory;
 }

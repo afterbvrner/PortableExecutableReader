@@ -2,6 +2,8 @@ package unmarshaller;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import structure.directory.ImageDataDirectory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,6 +23,11 @@ public class ObjectUnmarshaller {
     @SuppressWarnings("unchecked")
     public <T> T unmarshall(Class<T> type) throws IOException, ReflectiveOperationException {
         return (T) unmarshall(type, new UnmarshallHint());
+    }
+
+    @SneakyThrows
+    public void skip(long n) {
+        inputStream.skip(n);
     }
 
     private <T> Object unmarshall(Class<T> type, UnmarshallHint hint) throws IOException, ReflectiveOperationException {
@@ -61,7 +68,7 @@ public class ObjectUnmarshaller {
         return result;
     }
 
-    private void unmarshallField(Object obj, Field field) throws IOException, ReflectiveOperationException {
+    private <T> void unmarshallField(Object obj, Field field) throws IOException, ReflectiveOperationException {
         field.setAccessible(true);
 
         Ignore ignore = field.getAnnotation(Ignore.class);
@@ -134,6 +141,13 @@ public class ObjectUnmarshaller {
                     char[] data = new char[result.length];
                     for (int i = 0; i < data.length; i++)
                         data[i] = (char) result[i];
+                    field.set(obj, data);
+                }
+            } else {
+                if (field.getType().getComponentType().isAssignableFrom(ImageDataDirectory.class)) {
+                    ImageDataDirectory[] data = new ImageDataDirectory[result.length];
+                    for (int i = 0; i < data.length; i++)
+                        data[i] = (ImageDataDirectory) result[i];
                     field.set(obj, data);
                 }
             }

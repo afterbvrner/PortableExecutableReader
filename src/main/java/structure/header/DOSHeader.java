@@ -2,6 +2,7 @@ package structure.header;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import unmarshaller.Len;
 
 import java.io.Serializable;
 
@@ -22,7 +23,9 @@ public class DOSHeader implements Serializable {
     private short initialRelativeCS;
     private short addressOfRelocationTable;
     private short overlayNumber;
+    @Len(4)
     private short[] reserved;
+    @Len(10)
     private short[] reserved2;
     private short oemId;
     private short oemInfo;

@@ -2,11 +2,12 @@ package structure.header;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import unmarshaller.Len;
 
 @Data
 @NoArgsConstructor
 public class ImageSectionHeader {
-    char[] Name;
+    @Len(8) char[] name;
     int misc;
     int virtualAddress;
     int sizeOfRawData;
