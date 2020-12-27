@@ -17,4 +17,21 @@ public class ImageExportDirectory {
     int addressOfFunctions;
     int addressOfNames;
     int addressOfNameOrdinals;
+
+    @Override
+    public String toString() {
+        return "\nImageExportDirectory{" +
+                "characteristics=" + characteristics +
+                ", timeDateStamp=" + timeDateStamp +
+                ", majorVersion=" + majorVersion +
+                ", minorVersion=" + minorVersion +
+                ", name=" + name +
+                ", base=" + base +
+                ", numberOfFunctions=" + numberOfFunctions +
+                ", numberOfNames=" + numberOfNames +
+                ", addressOfFunctions=" + addressOfFunctions +
+                ", addressOfNames=" + addressOfNames +
+                ", addressOfNameOrdinals=" + addressOfNameOrdinals +
+                '}';
+    }
 }

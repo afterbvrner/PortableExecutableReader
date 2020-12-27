@@ -5,8 +5,11 @@ import lombok.NoArgsConstructor;
 import structure.directory.ImageDataDirectory;
 import unmarshaller.Len;
 
+import java.util.Arrays;
+
 @Data
 @NoArgsConstructor
+// Size: 108 + 128 = 236
 public class ImageOptionalHeader {
     short magic;
     char majorLinkerVersion;
@@ -26,7 +29,7 @@ public class ImageOptionalHeader {
     short minorImageVersion;
     short majorSubsystemVersion;
     short minorSubsystemVersion;
-    int min32VersionValue;
+    int win32VersionValue;
     int sizeOfImage;
     int sizeOfHeaders;
     int checkSum;
@@ -39,4 +42,41 @@ public class ImageOptionalHeader {
     int loaderFlags;
     int numberOfRvaAndSizes;
     @Len(16) ImageDataDirectory[] dataDirectory;
+
+    @Override
+    public String toString() {
+        return "\nImageOptionalHeader{" +
+                "magic=" + magic +
+                ", majorLinkerVersion=" + majorLinkerVersion +
+                ", minorLinkerVersion=" + minorLinkerVersion +
+                ", sizeOfCode=" + sizeOfCode +
+                ", sizeOfInitializedData=" + sizeOfInitializedData +
+                ", sizeOfUninitializedData=" + sizeOfUninitializedData +
+                ", addressOfEntryPoint=" + addressOfEntryPoint +
+                ", baseOfCode=" + baseOfCode +
+                ", baseOfData=" + baseOfData +
+                ", imageBase=" + imageBase +
+                ", sectionAlignment=" + sectionAlignment +
+                ", fileAlignment=" + fileAlignment +
+                ", majorOperatingSystemVersion=" + majorOperatingSystemVersion +
+                ", minorOperatingSystemVersion=" + minorOperatingSystemVersion +
+                ", majorImageVersion=" + majorImageVersion +
+                ", minorImageVersion=" + minorImageVersion +
+                ", majorSubsystemVersion=" + majorSubsystemVersion +
+                ", minorSubsystemVersion=" + minorSubsystemVersion +
+                ", win32VersionValue=" + win32VersionValue +
+                ", sizeOfImage=" + sizeOfImage +
+                ", sizeOfHeaders=" + sizeOfHeaders +
+                ", checkSum=" + checkSum +
+                ", subsystem=" + subsystem +
+                ", dllCharacteristics=" + dllCharacteristics +
+                ", sizeOfStackReserve=" + sizeOfStackReserve +
+                ", sizeOfStackCommit=" + sizeOfStackCommit +
+                ", sizeOfHeapReserve=" + sizeOfHeapReserve +
+                ", sizeOfHeapCommit=" + sizeOfHeapCommit +
+                ", loaderFlags=" + loaderFlags +
+                ", numberOfRvaAndSizes=" + numberOfRvaAndSizes +
+                ", dataDirectory=" + Arrays.toString(dataDirectory) +
+                '}';
+    }
 }

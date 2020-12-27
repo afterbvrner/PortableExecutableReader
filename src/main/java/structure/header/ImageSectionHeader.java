@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import unmarshaller.Len;
 
+import java.util.Arrays;
+
 @Data
 @NoArgsConstructor
 public class ImageSectionHeader {
@@ -16,5 +18,21 @@ public class ImageSectionHeader {
     int pointerToLineNumbers;
     short numberOfRelocations;
     short numberOfLineNumbers;
-    short characteristics;
+    int characteristics;
+
+    @Override
+    public String toString() {
+        return "\nImageSectionHeader{" +
+                "name=" + Arrays.toString(name) +
+                ", misc=" + misc +
+                ", virtualAddress=" + virtualAddress +
+                ", sizeOfRawData=" + sizeOfRawData +
+                ", pointerToRawData=" + pointerToRawData +
+                ", pointerToRelocations=" + pointerToRelocations +
+                ", pointerToLineNumbers=" + pointerToLineNumbers +
+                ", numberOfRelocations=" + numberOfRelocations +
+                ", numberOfLineNumbers=" + numberOfLineNumbers +
+                ", characteristics=" + characteristics +
+                '}';
+    }
 }

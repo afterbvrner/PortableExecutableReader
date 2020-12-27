@@ -1,36 +1,45 @@
 package controller;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import structure.directory.ImageExportDirectory;
 import structure.directory.ImageImportDirectory;
 import structure.header.*;
-import structure.image.DOSStub;
-import unmarshaller.ObjectUnmarshaller;
-
-import java.io.*;
-import java.nio.ByteOrder;
+import unmarshaller.GetLen;
 
 @Data
+@NoArgsConstructor
 public class PortableExecutable {
     DOSHeader dosHeader;
-    DOSStub stub;
-    Pe32PlusHeader pe32Header;
+    @GetLen("getStubSize")
+    char[] stub;
+    Pe32Header pe32Header;
     ImageFileHeader fileHeader;
-    ImageOptionalHeader32p optionalHeader;
+    ImageOptionalHeader optionalHeader;
+    @GetLen("getSectionsAmount")
     ImageSectionHeader sectionHeader;
     ImageExportDirectory exportDirectory;
     ImageImportDirectory importDirectory;
 
-    public PortableExecutable(File file) throws IOException, ReflectiveOperationException {
-        ObjectUnmarshaller unmarshaller = new ObjectUnmarshaller(
-                new FileInputStream(file),
-                ByteOrder.LITTLE_ENDIAN
-        );
-        dosHeader = unmarshaller.unmarshall(DOSHeader.class);
-        unmarshaller.skip(dosHeader.getAddressOfNewExeHeader() - 64);
-        pe32Header = unmarshaller.unmarshall(Pe32PlusHeader.class);
-        fileHeader = unmarshaller.unmarshall(ImageFileHeader.class);
-        optionalHeader = unmarshaller.unmarshall(ImageOptionalHeader32p.class);
-        sectionHeader = unmarshaller.unmarshall(ImageSectionHeader.class);
+    @Override
+    public String toString() {
+        return "PortableExecutable{" +
+                "dosHeader=" + dosHeader +
+                ", stub=" + String.valueOf(stub) +
+                ", pe32Header=" + pe32Header +
+                ", fileHeader=" + fileHeader +
+                ", optionalHeader=" + optionalHeader +
+                ", sectionHeader=" + sectionHeader +
+                ", exportDirectory=" + exportDirectory +
+                ", importDirectory=" + importDirectory +
+                '}';
+    }
+
+    public int getStubSize() {
+        return dosHeader.getAddressOfNewExeHeader() - 64;
+    }
+
+    public int getSectionsAmount() {
+        return fileHeader.getNumberOfSections();
     }
 }

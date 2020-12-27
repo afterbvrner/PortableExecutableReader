@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+// Size: 20
 public class ImageFileHeader {
     short machine;
     short numberOfSections;
@@ -13,4 +14,17 @@ public class ImageFileHeader {
     int numberOfSymbols;
     short sizeOfOptionalHeader;
     short characteristics;
+
+    @Override
+    public String toString() {
+        return "\nImageFileHeader{" +
+                "machine=" + machine +
+                ", numberOfSections=" + numberOfSections +
+                ", timeDateStamp=" + timeDateStamp +
+                ", pointerToSymbolTable=" + pointerToSymbolTable +
+                ", numberOfSymbols=" + numberOfSymbols +
+                ", sizeOfOptionalHeader=" + sizeOfOptionalHeader +
+                ", characteristics=" + characteristics +
+                '}';
+    }
 }
