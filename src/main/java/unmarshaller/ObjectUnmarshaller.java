@@ -21,6 +21,8 @@ public class ObjectUnmarshaller {
     private final InputStream inputStream;
     private final ByteOrder byteOrder;
 
+    private long position = 0L;
+
     @SuppressWarnings("unchecked")
     public <T> T unmarshall(Class<T> type) throws IOException, ReflectiveOperationException {
         return (T) unmarshall(type, new UnmarshallHint());
@@ -28,7 +30,7 @@ public class ObjectUnmarshaller {
 
     @SneakyThrows
     public void skip(long n) {
-        inputStream.skip(n);
+        position += inputStream.skip(n);
     }
 
     private <T> Object unmarshall(Class<T> type, UnmarshallHint hint) throws IOException, ReflectiveOperationException {
@@ -71,6 +73,13 @@ public class ObjectUnmarshaller {
 
     private void unmarshallField(Object obj, Field field) throws IOException, ReflectiveOperationException {
         field.setAccessible(true);
+
+        PositionAssert positionAssert = field.getAnnotation(PositionAssert.class);
+        if (positionAssert != null) {
+            Method assertionMethod = obj.getClass().getDeclaredMethod(positionAssert.value(), long.class);
+            if (!(boolean) assertionMethod.invoke(obj, position))
+                throw new AssertionError("Position assertion error");
+        }
 
         Ignore ignore = field.getAnnotation(Ignore.class);
         if (ignore != null)
@@ -157,11 +166,13 @@ public class ObjectUnmarshaller {
     }
 
     private byte readByte() throws IOException {
+        position += 1L;
         return (byte) inputStream.read();
     }
 
     private short readShort() throws IOException {
         byte[] data = inputStream.readNBytes(2);
+        position += 2L;
         return ByteBuffer.wrap(data)
                 .order(byteOrder)
                 .getShort();
@@ -169,6 +180,7 @@ public class ObjectUnmarshaller {
 
     private int readInt() throws IOException {
         byte[] data = inputStream.readNBytes(4);
+        position += 4L;
         return ByteBuffer.wrap(data)
                 .order(byteOrder)
                 .getInt();
@@ -176,6 +188,7 @@ public class ObjectUnmarshaller {
 
     private long readLong() throws IOException {
         byte[] data = inputStream.readNBytes(8);
+        position += 8L;
         return ByteBuffer.wrap(data)
                 .order(byteOrder)
                 .getLong();
@@ -193,6 +206,7 @@ public class ObjectUnmarshaller {
                 charset == StandardCharsets.UTF_16BE ||
                 charset == StandardCharsets.UTF_16LE) {
             byte[] data = inputStream.readNBytes(2);
+            position += 2;
             return ByteBuffer.wrap(data)
                     .order(byteOrder)
                     .getChar();
