@@ -12,12 +12,4 @@ import java.util.Arrays;
 public class Pe32Header {
     @Len(2) char[] signature1;
     short signature2;
-
-    @Override
-    public String toString() {
-        return "\nPe32Header{" +
-                "signature1=" + Arrays.toString(signature1) +
-                ", signature2=" + signature2 +
-                '}';
-    }
 }
