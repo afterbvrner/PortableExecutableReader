@@ -8,7 +8,7 @@ import unmarshaller.Len;
 @Data
 @NoArgsConstructor
 public class ImageImportDirectory {
-    int characteristics;
+    ImageThunkData32 originalFirstThunk;
     int timeDateStamp;
     int forwarderChain;
     @Len(4)

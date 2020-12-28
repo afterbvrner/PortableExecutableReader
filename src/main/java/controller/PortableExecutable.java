@@ -9,9 +9,6 @@ import unmarshaller.GetLen;
 import unmarshaller.GetPosition;
 import unmarshaller.PositionAssert;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 @Data
 @NoArgsConstructor
 public class PortableExecutable {
@@ -26,32 +23,19 @@ public class PortableExecutable {
     ImageSectionHeader[] sectionHeader;
     @GetPosition("getImportPosition")
     ImageImportDirectory importDirectory;
-
-    @Override
-    public String toString() {
-        return "PortableExecutable{" +
-                "dosHeader=" + dosHeader +
-                ", \nstub=" + String.valueOf(stub) +
-                ", \npe32Header=" + pe32Header +
-                ", \nfileHeader=" + fileHeader +
-                ", \noptionalHeader=" + optionalHeader +
-                ", \nsectionHeader=\n" + Arrays.stream(sectionHeader)
-                                            .map(Object::toString)
-                                            .collect(Collectors.joining("\n")) +
-                ", \nimportDirectory=" + importDirectory +
-                '}';
-    }
+    @GetPosition("getExportPosition")
+    ImageExportDirectory exportDirectory;
 
     public int getStubSize() {
         return dosHeader.getAddressOfNewExeHeader() - 64;
     }
 
     public long getImportPosition() {
-        return Arrays.stream(sectionHeader)
-                .filter(section -> String.valueOf(section.getName()).strip().matches("\\.reloc.*"))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No .reloc section"))
-                .getPointerToRawData();
+        return rvaToOff(optionalHeader.getDataDirectory()[1].getVirtualAddress());
+    }
+
+    public long getExportPosition() {
+        return rvaToOff(optionalHeader.getDataDirectory()[0].getVirtualAddress());
     }
 
     public int getSectionsAmount() {
@@ -60,5 +44,36 @@ public class PortableExecutable {
 
     public boolean assertPe32HeaderPosition(long position) {
         return position == 64 + stub.length;
+    }
+
+    int rvaToOff(int rva)
+    {
+        int indexSection = defSection(rva);
+        if (indexSection != -1)
+            return rva - sectionHeader[indexSection].getVirtualAddress()
+                    + sectionHeader[indexSection].getPointerToRawData();
+        else
+            return 0;
+    }
+
+    int defSection(int rva)
+    {
+        for (int i = 0; i < sectionHeader.length; ++i)
+        {
+            int start = sectionHeader[i].getVirtualAddress();
+            int end = start + alignUp(sectionHeader[i].getMisc(), optionalHeader.getSectionAlignment());
+
+            if (rva >= start && rva < end)
+                return i;
+        }
+        return -1;
+    }
+
+    int alignDown(int x, int align) {
+        return x & -align;
+    }
+
+    int alignUp(int x, int align) {
+        return ((x & (align - 1)) != 0 ? alignDown(x, align) + align : x);
     }
 }

@@ -1,10 +1,9 @@
 package structure.header;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import unmarshaller.Len;
-
-import java.util.Arrays;
 
 @Data
 @NoArgsConstructor
@@ -18,6 +17,11 @@ public class ImageSectionHeader {
     int pointerToLineNumbers;
     short numberOfRelocations;
     short numberOfLineNumbers;
-    @Len(4)
-    char[] characteristics;
+    int characteristics;
+
+    @JsonGetter
+    public String getName() {
+        return String.valueOf(name)
+                .replaceAll("\\u0000", "");
+    }
 }

@@ -9,7 +9,7 @@ import java.nio.ByteOrder;
 public class Main {
     public static void main(String[] args) throws IOException, ReflectiveOperationException {
         ObjectUnmarshaller unmarshaller = new ObjectUnmarshaller(
-                new FileInputStream("src/main/resources/BasePC.exe"),
+                new FileInputStream("src/main/resources/HxDSetup.exe"),
                 ByteOrder.LITTLE_ENDIAN
         );
         PortableExecutable executable = unmarshaller.unmarshall(PortableExecutable.class);

@@ -2,11 +2,12 @@ package structure.directory;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import structure.thunk.ImageThunkData32;
 
 @Data
 @NoArgsConstructor
 public class ImageExportDirectory {
-    int characteristics;
+    ImageThunkData32 characteristics;
     int timeDateStamp;
     short majorVersion;
     short minorVersion;

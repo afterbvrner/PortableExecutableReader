@@ -2,7 +2,6 @@ package structure.header;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import unmarshaller.Len;
 
 @Data
 @NoArgsConstructor
@@ -14,6 +13,5 @@ public class ImageFileHeader {
     int pointerToSymbolTable;
     int numberOfSymbols;
     short sizeOfOptionalHeader;
-    @Len(2)
-    byte[] characteristics;
+    short characteristics;
 }
