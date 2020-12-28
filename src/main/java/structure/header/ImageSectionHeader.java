@@ -18,5 +18,6 @@ public class ImageSectionHeader {
     int pointerToLineNumbers;
     short numberOfRelocations;
     short numberOfLineNumbers;
-    int characteristics;
+    @Len(4)
+    char[] characteristics;
 }

@@ -6,6 +6,7 @@ import structure.directory.ImageExportDirectory;
 import structure.directory.ImageImportDirectory;
 import structure.header.*;
 import unmarshaller.GetLen;
+import unmarshaller.GetPosition;
 import unmarshaller.PositionAssert;
 
 import java.util.Arrays;
@@ -23,7 +24,7 @@ public class PortableExecutable {
     ImageOptionalHeader optionalHeader;
     @GetLen("getSectionsAmount")
     ImageSectionHeader[] sectionHeader;
-    ImageExportDirectory exportDirectory;
+    @GetPosition("getImportPosition")
     ImageImportDirectory importDirectory;
 
     @Override
@@ -37,13 +38,20 @@ public class PortableExecutable {
                 ", \nsectionHeader=\n" + Arrays.stream(sectionHeader)
                                             .map(Object::toString)
                                             .collect(Collectors.joining("\n")) +
-                ", \nexportDirectory=" + exportDirectory +
                 ", \nimportDirectory=" + importDirectory +
                 '}';
     }
 
     public int getStubSize() {
         return dosHeader.getAddressOfNewExeHeader() - 64;
+    }
+
+    public long getImportPosition() {
+        return Arrays.stream(sectionHeader)
+                .filter(section -> String.valueOf(section.getName()).strip().matches("\\.reloc.*"))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No .reloc section"))
+                .getPointerToRawData();
     }
 
     public int getSectionsAmount() {
