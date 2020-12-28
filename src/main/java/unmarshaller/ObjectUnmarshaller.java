@@ -74,6 +74,17 @@ public class ObjectUnmarshaller {
     private void unmarshallField(Object obj, Field field) throws IOException, ReflectiveOperationException {
         field.setAccessible(true);
 
+        Position positionAnnotation = field.getAnnotation(Position.class);
+        if (positionAnnotation != null && positionAnnotation.value() - position > 0)
+            position += inputStream.skip(positionAnnotation.value() - position);
+
+        GetPosition getPosition = field.getAnnotation(GetPosition.class);
+        if (getPosition != null) {
+            Method getPositionMethod = obj.getClass().getDeclaredMethod(getPosition.value());
+            long newPos = (long) getPositionMethod.invoke(obj);
+            position += inputStream.skip(newPos - position);
+        }
+
         PositionAssert positionAssert = field.getAnnotation(PositionAssert.class);
         if (positionAssert != null) {
             Method assertionMethod = obj.getClass().getDeclaredMethod(positionAssert.value(), long.class);
